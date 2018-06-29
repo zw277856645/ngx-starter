@@ -1,0 +1,63 @@
+@import "lib";
+
+body {
+  font-family: Tahoma, Helvetica, Arial, '微软雅黑', sans-serif;
+  background: #fdfdfd;
+  overflow-x: hidden;
+  overflow-y: scroll !important;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+  clear: both;
+}
+
+a {
+  outline: none;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.left.floated {
+  float: left;
+}
+
+.right.floated {
+  float: right;
+}
+
+body ::-webkit-scrollbar {
+  width: .4em;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+}
+
+select::placeholder,
+textarea::placeholder,
+input::placeholder {
+  font-size: .9285em;
+}
+
+
+
+
+
