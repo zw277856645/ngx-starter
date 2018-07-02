@@ -9,6 +9,10 @@
     "prod:aot:start": "npm run prod:aot && lite-server -c config/prod-server.config.json",
     "clean": "rimraf dist"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/zw277856645/ngx-starter"
+  },
   "keywords": [],
   "author": "",
   "license": "MIT",
