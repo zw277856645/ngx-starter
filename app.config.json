@@ -1,6 +1,4 @@
 {
-  "version": "1.5.0",
-  "server_url": "http://cps-local.elenet.me:8080/cps/",
-  "sso_url": "https://ssodev.rajax.me/auth/entry",
-  "grafana_url": "http://grafana-docker.tools.elenet.me/dashboard/db/system-monitor-hosts"
+  "version": "0.0.0",
+  "server_url": "http://localhost:8080/"
 }
