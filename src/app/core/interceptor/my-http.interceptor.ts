@@ -150,8 +150,8 @@ export class MyHttpInterceptor implements HttpInterceptor {
                 }
             }
         } else if (isArray(params)) {
-            for (let p of (<any[]>params)) {
-                p = this.trimString(p);
+            for (let i = 0, len = params.length; i < len; i++) {
+                params[ i ] = this.trimString(params[ i ]);
             }
         }
         return params;
