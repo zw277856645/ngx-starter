@@ -3,6 +3,8 @@ import {
     HttpErrorResponse, HttpHandler, HttpInterceptor, HttpParams, HttpRequest, HttpResponse
 } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 import { ApiResponse, ApiResponseStatus } from '../../shared/model/api-response';
 import { isArray, isNullOrUndefined, isString } from 'util';
 import { ServerConfigsService } from '../service/server-configs.service';
