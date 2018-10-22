@@ -22,4 +22,3 @@ const routes: Routes = [
 })
 export class AppRouterModule {
 }
-

@@ -8,4 +8,3 @@ import 'jquery/dist/jquery.min.js';
 import 'moment/moment.js';
 
 import './asset/style/base.less';
-

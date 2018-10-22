@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
-    HttpErrorResponse, HttpHandler, HttpInterceptor, HttpParams, HttpRequest, HttpResponse
+    HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpParams, HttpRequest, HttpResponse
 } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
@@ -15,7 +15,7 @@ export class MyHttpInterceptor implements HttpInterceptor {
     constructor(private serverConfigsService: ServerConfigsService) {
     }
 
-    intercept(req: HttpRequest<any>, next: HttpHandler) {
+    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return Observable.fromPromise(this.getUrl(req.url)).switchMap(finalUrl => {
             const dupReq = req.clone({
                 url: finalUrl,
@@ -29,6 +29,7 @@ export class MyHttpInterceptor implements HttpInterceptor {
                     if (event instanceof HttpResponse) {
                         return event.clone({ body: this.handlerResponse(event.body) });
                     }
+
                     return event;
                 })
                 .catch(event => {
@@ -51,17 +52,19 @@ export class MyHttpInterceptor implements HttpInterceptor {
         let ret = new ApiResponse();
         if (this.isRealObject(body)) {
             if (this.isApiResponseStatus(body.status)) {
-                ret.status = ApiResponseStatus[ (<string>body.status) ];
+                ret.status = ApiResponseStatus[ (<string> body.status) ];
                 ret.message = body.message;
                 ret.data = body.data;
             } else {
                 ret.status = ApiResponseStatus.SUCCESS;
                 ret.data = body;
             }
+
             return ret;
         } else if (isArray(body) || isNullOrUndefined(body)) {
             ret.status = ApiResponseStatus.SUCCESS;
             ret.data = body;
+
             return ret;
         } else {
             return body;
@@ -95,6 +98,7 @@ export class MyHttpInterceptor implements HttpInterceptor {
         if (!errorSilent) {
             this.showError(ret);
         }
+
         return ret;
     }
 
@@ -109,6 +113,7 @@ export class MyHttpInterceptor implements HttpInterceptor {
                     ApiResponseStatus[ ApiResponseStatus.ERROR ]
                 ].indexOf(status.toUpperCase()) >= 0;
         }
+
         return false;
     }
 
@@ -121,8 +126,10 @@ export class MyHttpInterceptor implements HttpInterceptor {
                     pm[ k ] = v;
                 }
             });
+
             return new HttpParams({ fromObject: pm });
         }
+
         return params;
     }
 
@@ -137,8 +144,10 @@ export class MyHttpInterceptor implements HttpInterceptor {
                     }
                 }
             }
+
             return bd;
         }
+
         return body;
     }
 
@@ -146,7 +155,7 @@ export class MyHttpInterceptor implements HttpInterceptor {
         if (isString(params)) {
             return params.trim();
         } else if (this.isRealObject(params)) {
-            for (let k in (<any>params)) {
+            for (let k in (<any> params)) {
                 if (params.hasOwnProperty(k)) {
                     params[ k ] = this.trimString(params[ k ]);
                 }
@@ -156,6 +165,7 @@ export class MyHttpInterceptor implements HttpInterceptor {
                 params[ i ] = this.trimString(params[ i ]);
             }
         }
+
         return params;
     }
 
