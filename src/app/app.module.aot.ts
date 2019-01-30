@@ -4,14 +4,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { AppRouterModuleAot } from './app-router.module.aot';
 import { CoreModule } from './core/core.module';
-import { SharedModule } from './shared/shared.module';
+import { SharedCoreModule } from './shared/shared-core.module';
 
 @NgModule({
     imports: [
+        CoreModule,
+        SharedCoreModule,
         BrowserModule,
         BrowserAnimationsModule,
-        CoreModule,
-        SharedModule,
         AppRouterModuleAot
     ],
     declarations: [ AppComponent ],

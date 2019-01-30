@@ -16,7 +16,7 @@ export class MyHttpInterceptor implements HttpInterceptor {
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        return Observable.fromPromise(this.getUrl(req.url)).switchMap(finalUrl => {
+        return this.getUrl(req.url).switchMap(finalUrl => {
             const dupReq = req.clone({
                 url: finalUrl,
                 params: this.trimParams(req.params),
@@ -25,25 +25,25 @@ export class MyHttpInterceptor implements HttpInterceptor {
             });
 
             return next.handle(dupReq)
-                .map(event => {
-                    if (event instanceof HttpResponse) {
-                        return event.clone({ body: this.handlerResponse(event.body) });
-                    }
+                       .map(event => {
+                           if (event instanceof HttpResponse) {
+                               return event.clone({ body: this.handlerResponse(event.body) });
+                           }
 
-                    return event;
-                })
-                .catch(event => {
-                    if (event instanceof HttpErrorResponse) {
-                        return Observable.throw(new HttpResponse({
-                            body: this.handlerError(event, dupReq.params.has('errorSilent'))
-                        }));
-                    }
-                });
+                           return event;
+                       })
+                       .catch(event => {
+                           if (event instanceof HttpErrorResponse) {
+                               return Observable.throw(new HttpResponse({
+                                   body: this.handlerError(event, dupReq.params.has('errorSilent'))
+                               }));
+                           }
+                       });
         });
     }
 
-    private getUrl(url: string): Promise<string> {
-        return this.serverConfigsService.getServerUrl().then(serverUrl => {
+    private getUrl(url: string) {
+        return this.serverConfigsService.getServerUrl().map(serverUrl => {
             return /^https?:\/\//i.test(url) ? url : serverUrl + url;
         });
     }
@@ -52,7 +52,7 @@ export class MyHttpInterceptor implements HttpInterceptor {
         let ret = new ApiResponse();
         if (this.isRealObject(body)) {
             if (this.isApiResponseStatus(body.status)) {
-                ret.status = ApiResponseStatus[ (<string> body.status) ];
+                ret.status = ApiResponseStatus[ (<string>body.status) ];
                 ret.message = body.message;
                 ret.data = body.data;
             } else {
@@ -109,9 +109,9 @@ export class MyHttpInterceptor implements HttpInterceptor {
     private isApiResponseStatus(status: any) {
         if (isString(status)) {
             return [
-                    ApiResponseStatus[ ApiResponseStatus.SUCCESS ],
-                    ApiResponseStatus[ ApiResponseStatus.ERROR ]
-                ].indexOf(status.toUpperCase()) >= 0;
+                ApiResponseStatus[ ApiResponseStatus.SUCCESS ],
+                ApiResponseStatus[ ApiResponseStatus.ERROR ]
+            ].indexOf(status.toUpperCase()) >= 0;
         }
 
         return false;
@@ -155,7 +155,7 @@ export class MyHttpInterceptor implements HttpInterceptor {
         if (isString(params)) {
             return params.trim();
         } else if (this.isRealObject(params)) {
-            for (let k in (<any> params)) {
+            for (let k in (<any>params)) {
                 if (params.hasOwnProperty(k)) {
                     params[ k ] = this.trimString(params[ k ]);
                 }
