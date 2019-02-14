@@ -5,14 +5,16 @@ import {
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
-import { ApiResponse, ApiResponseStatus } from '../../shared/model/api-response';
+import { ApiResponse, ApiResponseStatus } from './api-response';
 import { isArray, isNullOrUndefined, isString } from 'util';
 import { ServerConfigsService } from '../service/server-configs.service';
+import { NavigationStart, Router } from '@angular/router';
 
 @Injectable()
 export class MyHttpInterceptor implements HttpInterceptor {
 
-    constructor(private serverConfigsService: ServerConfigsService) {
+    constructor(private serverConfigsService: ServerConfigsService,
+                private router: Router) {
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -25,6 +27,8 @@ export class MyHttpInterceptor implements HttpInterceptor {
             });
 
             return next.handle(dupReq)
+                       // 切换导航时取消所有之前未完成的请求
+                       .takeUntil(this.router.events.filter(e => e instanceof NavigationStart))
                        .map(event => {
                            if (event instanceof HttpResponse) {
                                return event.clone({ body: this.handlerResponse(event.body) });
