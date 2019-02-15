@@ -39,7 +39,7 @@ export class MyHttpInterceptor implements HttpInterceptor {
                        .catch(event => {
                            if (event instanceof HttpErrorResponse) {
                                return Observable.throw(new HttpResponse({
-                                   body: this.handlerError(event, dupReq.params.has('errorSilent'))
+                                   body: this.handlerError(event)
                                }));
                            }
                        });
@@ -75,7 +75,7 @@ export class MyHttpInterceptor implements HttpInterceptor {
         }
     }
 
-    private handlerError(error: HttpErrorResponse, errorSilent: boolean) {
+    private handlerError(error: HttpErrorResponse) {
         let ret;
         if (error.error && this.isApiResponseStatus(error.error.status)) {
             ret = error.error;
@@ -99,15 +99,8 @@ export class MyHttpInterceptor implements HttpInterceptor {
             ret.status = ApiResponseStatus.ERROR;
             ret.message = error.message;
         }
-        if (!errorSilent) {
-            this.showError(ret);
-        }
 
         return ret;
-    }
-
-    // TODO
-    private showError(err: ApiResponse) {
     }
 
     private isApiResponseStatus(status: any) {
