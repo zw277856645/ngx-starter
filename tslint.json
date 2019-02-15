@@ -217,6 +217,8 @@
       "check-type",
       "check-type-operator",
       "check-preblock"
-    ]
+    ],
+    "## TSLint 040": "使用 === 和 !== 替代 == 和 !=",
+    "triple-equals": true
   }
 }

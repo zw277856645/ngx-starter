@@ -13,7 +13,7 @@ export interface RequestOptions {
     };
     observe?: HttpObserve;
     params?: HttpParams | {
-        [ param: string ]: string | string[];
+        [ param: string ]: any | any[];
     };
     reportProgress?: boolean;
     responseType?: ResponseType;
@@ -21,6 +21,7 @@ export interface RequestOptions {
 
     // 扩展属性
     catchError?: boolean;
+    errorData?: any;
 }
 
 export function myHttpClientCreator(http: HttpClient) {
@@ -57,8 +58,9 @@ export class MyHttpClient {
 
         return req.catch(err => {
             let errBody = err.body as ApiResponse;
+            let data = ('errorData' in ops) ? ops.errorData : errBody;
 
-            return ops.catchError ? Observable.of(errBody) : Observable.throw(errBody);
+            return ops.catchError ? Observable.of(data) : Observable.throw(data);
         });
     }
 
