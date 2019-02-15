@@ -90,7 +90,7 @@ export class MyHttpInterceptor implements HttpInterceptor {
             ret = new ApiResponse();
             ret.status = ApiResponseStatus.ERROR;
             ret.message = error.error;
-        } else if (error.status == 0 && error.statusText == 'Unknown Error') {
+        } else if (error.status === 0 && error.statusText === 'Unknown Error') {
             ret = new ApiResponse();
             ret.status = ApiResponseStatus.ERROR;
             ret.message = '网络异常，请稍后再试';
@@ -167,7 +167,7 @@ export class MyHttpInterceptor implements HttpInterceptor {
     }
 
     private isUndefinedParam(pm: any[]) {
-        return isNullOrUndefined(pm) || (pm.length == 1 && pm[ 0 ] === undefined);
+        return isNullOrUndefined(pm) || (pm.length === 1 && pm[ 0 ] === undefined);
     }
 
     private isRealObject(obj: any) {
