@@ -9,6 +9,7 @@ import { ApiResponse, ApiResponseStatus } from './api-response';
 import { isArray, isNullOrUndefined, isString } from 'util';
 import { ServerConfigsService } from '../service/server-configs.service';
 import { NavigationStart, Router } from '@angular/router';
+import { clone, isRealObject } from '../../shared/util/util';
 
 @Injectable()
 export class MyHttpInterceptor implements HttpInterceptor {
@@ -54,8 +55,8 @@ export class MyHttpInterceptor implements HttpInterceptor {
 
     private handlerResponse(body: any) {
         let ret = new ApiResponse();
-        if (this.isRealObject(body)) {
-            if (this.isApiResponseStatus(body.status)) {
+        if (isRealObject(body)) {
+            if (MyHttpInterceptor.isApiResponseStatus(body.status)) {
                 ret.status = ApiResponseStatus[ (<string>body.status) ];
                 ret.message = body.message;
                 ret.data = body.data;
@@ -77,7 +78,7 @@ export class MyHttpInterceptor implements HttpInterceptor {
 
     private handlerError(error: HttpErrorResponse) {
         let ret;
-        if (error.error && this.isApiResponseStatus(error.error.status)) {
+        if (error.error && MyHttpInterceptor.isApiResponseStatus(error.error.status)) {
             ret = error.error;
             ret.status = ApiResponseStatus.ERROR;
             ret.detail = ret.data;
@@ -103,23 +104,12 @@ export class MyHttpInterceptor implements HttpInterceptor {
         return ret;
     }
 
-    private isApiResponseStatus(status: any) {
-        if (isString(status)) {
-            return [
-                ApiResponseStatus[ ApiResponseStatus.SUCCESS ],
-                ApiResponseStatus[ ApiResponseStatus.ERROR ]
-            ].indexOf(status.toUpperCase()) >= 0;
-        }
-
-        return false;
-    }
-
     private trimParams(params: HttpParams) {
         if (params && params.keys().length > 0) {
             let pm = {};
             params.keys().forEach(k => {
                 let v = this.trimString(params.getAll(k));
-                if (!this.isUndefinedParam(v)) {
+                if (!MyHttpInterceptor.isEmptyParam(v)) {
                     pm[ k ] = v;
                 }
             });
@@ -131,12 +121,12 @@ export class MyHttpInterceptor implements HttpInterceptor {
     }
 
     private trimBody(body: any) {
-        if (this.isRealObject(body) && !(body instanceof FormData)) {
+        if (isRealObject(body) && !(body instanceof FormData)) {
             let bd = {};
             for (let k in body) {
                 if (body.hasOwnProperty(k)) {
                     let v = this.trimString(body[ k ]);
-                    if (!this.isUndefinedParam(v)) {
+                    if (!MyHttpInterceptor.isEmptyParam(v)) {
                         bd[ k ] = v;
                     }
                 }
@@ -149,28 +139,41 @@ export class MyHttpInterceptor implements HttpInterceptor {
     }
 
     private trimString(params: any) {
-        if (isString(params)) {
-            return params.trim();
-        } else if (this.isRealObject(params)) {
-            for (let k in (<any>params)) {
-                if (params.hasOwnProperty(k)) {
-                    params[ k ] = this.trimString(params[ k ]);
+        let pm = clone(params);
+
+        if (isString(pm)) {
+            return pm.trim();
+        } else if (isRealObject(pm)) {
+            for (let k in (pm as any)) {
+                if (pm.hasOwnProperty(k)) {
+                    pm[ k ] = this.trimString(pm[ k ]);
+                    if (MyHttpInterceptor.isEmptyParam(pm[ k ])) {
+                        delete pm[ k ];
+                    }
                 }
             }
-        } else if (isArray(params)) {
-            for (let i = 0, len = params.length; i < len; i++) {
-                params[ i ] = this.trimString(params[ i ]);
+        } else if (isArray(pm)) {
+            for (let i = 0, len = pm.length; i < len; i++) {
+                pm[ i ] = this.trimString(pm[ i ]);
             }
         }
 
-        return params;
+        return pm;
     }
 
-    private isUndefinedParam(pm: any[]) {
-        return isNullOrUndefined(pm) || (pm.length === 1 && pm[ 0 ] === undefined);
+    private static isApiResponseStatus(status: any) {
+        if (isString(status)) {
+            return [
+                ApiResponseStatus[ ApiResponseStatus.SUCCESS ],
+                ApiResponseStatus[ ApiResponseStatus.ERROR ]
+            ].indexOf(status.toUpperCase()) >= 0;
+        }
+
+        return false;
     }
 
-    private isRealObject(obj: any) {
-        return Object.prototype.toString.call(obj) === '[object Object]';
+    private static isEmptyParam(v: any) {
+        return isNullOrUndefined(v) || (isString(v) && (v as string).length === 0);
     }
+
 }
