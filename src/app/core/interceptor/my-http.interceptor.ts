@@ -9,7 +9,7 @@ import { ApiResponse, ApiResponseStatus } from './api-response';
 import { isArray, isNullOrUndefined, isString } from 'util';
 import { ServerConfigsService } from '../service/server-configs.service';
 import { NavigationStart, Router } from '@angular/router';
-import { clone, isRealObject } from '../../shared/util/util';
+import { clone, isEmptyArray, isRealObject } from '../../shared/util/util';
 
 @Injectable()
 export class MyHttpInterceptor implements HttpInterceptor {
@@ -109,7 +109,7 @@ export class MyHttpInterceptor implements HttpInterceptor {
             let pm = {};
             params.keys().forEach(k => {
                 let v = this.trimString(params.getAll(k));
-                if (!MyHttpInterceptor.isEmptyParam(v)) {
+                if (!(isEmptyArray(v) || (v.length === 1 && isNullOrUndefined(v[ 0 ])))) {
                     pm[ k ] = v;
                 }
             });
