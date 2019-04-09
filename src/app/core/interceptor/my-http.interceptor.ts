@@ -126,7 +126,7 @@ export class MyHttpInterceptor implements HttpInterceptor {
             for (let k in body) {
                 if (body.hasOwnProperty(k)) {
                     let v = this.trimString(body[ k ]);
-                    if (!MyHttpInterceptor.isEmptyParam(v)) {
+                    if (!isNullOrUndefined(v)) {
                         bd[ k ] = v;
                     }
                 }
@@ -147,7 +147,7 @@ export class MyHttpInterceptor implements HttpInterceptor {
             for (let k in (pm as any)) {
                 if (pm.hasOwnProperty(k)) {
                     pm[ k ] = this.trimString(pm[ k ]);
-                    if (MyHttpInterceptor.isEmptyParam(pm[ k ])) {
+                    if (isNullOrUndefined(pm[ k ])) {
                         delete pm[ k ];
                     }
                 }
@@ -170,10 +170,6 @@ export class MyHttpInterceptor implements HttpInterceptor {
         }
 
         return false;
-    }
-
-    private static isEmptyParam(v: any) {
-        return isNullOrUndefined(v) || (isString(v) && (v as string).length === 0);
     }
 
 }
