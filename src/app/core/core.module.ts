@@ -5,15 +5,19 @@ import { MyHttpInterceptor } from './interceptor/my-http.interceptor';
 import { HttpModule } from '@angular/http';
 import { ServerConfigsService } from './service/server-configs.service';
 import { MyHttpClient, myHttpClientCreator } from './interceptor/my-http-client';
+import { SharedCoreModule } from '../shared/shared-core.module';
 
 @NgModule({
     imports: [
         CommonModule,
         HttpModule,
-        HttpClientModule
+        HttpClientModule,
+        SharedCoreModule
     ],
     declarations: [],
-    exports: [],
+    exports: [
+        SharedCoreModule
+    ],
     providers: [
         ServerConfigsService,
 
