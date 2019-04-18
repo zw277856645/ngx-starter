@@ -12,12 +12,13 @@ module.exports = webpackMerge(commonConfig, {
         'app': './src/main.ts'
     },
 
-    devtool: 'cheap-source-map',
+    devtool: 'source-map',
 
     module: {
         loaders: [
             {
                 test: /\.ts$/,
+                exclude: [ /\.(spec|e2e)\.ts$/ ],
                 loaders: [
                     {
                         loader: 'awesome-typescript-loader',

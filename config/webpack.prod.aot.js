@@ -10,6 +10,10 @@ var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 var helpers = require('./helpers');
 var commonConfig = require('./webpack.common.js');
 
+// for dynamic module
+// 禁止ngtools删除元数据。官方没有提供配置，采用hack处理
+require('./hack-remove-decorators').hack();
+
 module.exports = webpackMerge(commonConfig, {
 
     entry: {
@@ -20,6 +24,13 @@ module.exports = webpackMerge(commonConfig, {
 
     module: {
         loaders: [
+            // for dynamic module
+            // ngtools没有处理动态组件的templateUrl，使用template:require(templateUrl)同样不行(ngtools的bug)
+            {
+                test: /\.ts$/,
+                exclude: [ /\.(spec|e2e)\.ts$/ ],
+                loader: 'angular2-template-loader'
+            },
             {
                 test: /\.js$/,
                 exclude: /node_modules\/(?!(dom7|swiper)\/).*/,

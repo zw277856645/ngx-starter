@@ -28,9 +28,7 @@ module.exports = {
             // 非app中less，打包成单独文件(vendor.css)
             {
                 test: /\.(css|less)$/,
-                exclude: [
-                    helpers.root('src', 'app')
-                ],
+                exclude: [ helpers.root('src', 'app') ],
                 loader: ExtractTextPlugin.extract({
                     fallbackLoader: 'style-loader',
                     loader: 'css-loader?sourceMap&minimize!postcss-loader!less-loader'
@@ -39,9 +37,7 @@ module.exports = {
             // app中css|less，内联
             {
                 test: /\.(css|less)$/,
-                include: [
-                    helpers.root('src', 'app')
-                ],
+                include: [ helpers.root('src', 'app') ],
                 loader: "to-string-loader!css-loader!postcss-loader!less-loader"
             }
         ]
