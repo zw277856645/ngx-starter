@@ -27,3 +27,9 @@ src/index.html
 
 src/favicon
 
+
+# 不使用AOT编译或没有动态模块
+src/app/core/core.module.ts
+config/webpack.prod.aot.js
+- for dynamic module
+

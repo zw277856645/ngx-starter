@@ -35,7 +35,7 @@ import { RuntimeCompiler } from './service/compiler.service';
         },
 
         // for dynamic module
-        // AOT会剔除编译模块，此处手动创建一个。若生产环境也是JIT编译或没有动态模块，此配置可以去掉
+        // AOT会剔除编译模块，此处手动创建一个。若不使用AOT编译或没有动态模块，此配置可以去掉
         {
             provide: COMPILER_OPTIONS,
             useValue: {},
