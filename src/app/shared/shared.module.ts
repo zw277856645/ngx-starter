@@ -6,18 +6,18 @@ import { SharedCoreModule } from './shared-core.module';
 
 @NgModule({
     imports: [
-        SharedCoreModule,
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
+        SharedCoreModule,
         Ng2Webstorage
     ],
     declarations: [],
     exports: [
-        SharedCoreModule,
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
+        SharedCoreModule,
         Ng2Webstorage
     ]
 })

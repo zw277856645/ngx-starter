@@ -9,7 +9,7 @@ import { ApiResponse, ApiResponseStatus } from './api-response';
 import { isArray, isNullOrUndefined, isString } from 'util';
 import { ServerConfigsService } from '../service/server-configs.service';
 import { NavigationStart, Router } from '@angular/router';
-import { clone, isEmptyArray, isRealObject } from '../../shared/util/util';
+import { clone, isEmptyArray, isRealObject } from '../util/util';
 
 @Injectable()
 export class MyHttpInterceptor implements HttpInterceptor {
