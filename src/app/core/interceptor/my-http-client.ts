@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpObserve } from '@angular/common/http/src/client';
-import { ApiResponse } from './api-response';
+import { ApiResponse } from '../model/api-response';
 
 export type ResponseType = 'json' | 'arraybuffer' | 'text' | 'blob';
 

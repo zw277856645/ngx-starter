@@ -5,7 +5,7 @@ import {
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
-import { ApiResponse, ApiResponseStatus } from './api-response';
+import { ApiResponse, ApiResponseStatus } from '../model/api-response';
 import { isArray, isNullOrUndefined, isString } from 'util';
 import { ServerConfigsService } from '../service/server-configs.service';
 import { NavigationStart, Router } from '@angular/router';
