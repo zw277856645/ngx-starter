@@ -12,7 +12,7 @@ module.exports = webpackMerge(commonConfig, {
         'app': './src/main.ts'
     },
 
-    devtool: 'source-map',
+    devtool: 'cheap-module-eval-source-map',
 
     module: {
         loaders: [

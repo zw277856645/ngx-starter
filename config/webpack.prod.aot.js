@@ -20,7 +20,7 @@ module.exports = webpackMerge(commonConfig, {
         'app': './src/main.aot.ts'
     },
 
-    devtool: 'source-map',
+    devtool: 'cheap-module-source-map',
 
     module: {
         loaders: [
