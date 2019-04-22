@@ -1,14 +1,14 @@
-var webpack = require('webpack');
-var webpackMerge = require('webpack-merge');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var CleanWebpackPlugin = require('clean-webpack-plugin');
-var BaseHrefModule = require('base-href-webpack-plugin');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
-var ngtools = require('@ngtools/webpack');
-var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const webpack = require('webpack');
+const webpackMerge = require('webpack-merge');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const BaseHrefModule = require('base-href-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ngtools = require('@ngtools/webpack');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
-var helpers = require('./helpers');
-var commonConfig = require('./webpack.common.js');
+const helpers = require('./helpers');
+const commonConfig = require('./webpack.common.js');
 
 // for dynamic module
 // 禁止ngtools删除元数据。官方没有提供配置，采用hack处理

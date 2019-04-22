@@ -1,10 +1,10 @@
-var webpack = require('webpack');
-var webpackMerge = require('webpack-merge');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var BaseHrefModule = require('base-href-webpack-plugin');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
-var helpers = require('./helpers');
-var commonConfig = require('./webpack.common.js');
+const webpack = require('webpack');
+const webpackMerge = require('webpack-merge');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const BaseHrefModule = require('base-href-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const helpers = require('./helpers');
+const commonConfig = require('./webpack.common.js');
 
 module.exports = webpackMerge(commonConfig, {
 
