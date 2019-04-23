@@ -4,8 +4,11 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const BaseHrefModule = require('base-href-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ngtools = require('ngtools-skip-remove-decorators');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+
+// for dynamic module
+// 不使用动态模块请使用官方@ngtools/webpack替代
+const ngtools = require('ngtools-skip-remove-decorators');
 
 const helpers = require('./helpers');
 const commonConfig = require('./webpack.common.js');
@@ -34,7 +37,7 @@ module.exports = webpackMerge(commonConfig, {
             },
             {
                 test: /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/,
-                loader: 'ngtools-skip-remove-decorators'
+                loader: 'ngtools-skip-remove-decorators' // for dynamic module
             }
         ]
     },
