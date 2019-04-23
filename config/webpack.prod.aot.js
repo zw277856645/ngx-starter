@@ -4,7 +4,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const BaseHrefModule = require('base-href-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ngtools = require('@ngtools/webpack');
+const ngtools = require('ngtools-skip-remove-decorators');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 const helpers = require('./helpers');
@@ -38,7 +38,7 @@ module.exports = webpackMerge(commonConfig, {
             },
             {
                 test: /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/,
-                loader: '@ngtools/webpack'
+                loader: 'ngtools-skip-remove-decorators'
             }
         ]
     },
@@ -63,7 +63,11 @@ module.exports = webpackMerge(commonConfig, {
         new ngtools.AngularCompilerPlugin({
             tsConfigPath: 'src/tsconfig.aot.json',
             entryModule: 'src/app/app.module.aot#AppModuleAot',
-            sourceMap: true
+            sourceMap: true,
+
+            // for dynamic module
+            // ngtools会删除元数据，fork代码修复此问题
+            skipRemoveDecorators: true
         })
     ]
 });
