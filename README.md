@@ -17,10 +17,6 @@ config/webpack.prod.aot.js
 - plugins CopyWebpackPlugin（可选，设置生产环境的app.config）
 
 
-config/prod-server.config.json
-- port（可选）
-
-
 src/index.html
 - title
 
