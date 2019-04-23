@@ -9,16 +9,16 @@ import { SharedCoreModule } from './shared-core.module';
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        SharedCoreModule,
-        Ng2Webstorage
+        Ng2Webstorage,
+        SharedCoreModule
     ],
     declarations: [],
     exports: [
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        SharedCoreModule,
-        Ng2Webstorage
+        Ng2Webstorage,
+        SharedCoreModule
     ]
 })
 export class SharedModule {

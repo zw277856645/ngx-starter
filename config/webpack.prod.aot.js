@@ -65,7 +65,7 @@ module.exports = webpackMerge(commonConfig, {
             sourceMap: true,
 
             // for dynamic module
-            // ngtools会删除元数据，fork代码修复此问题
+            // ngtools会删除元数据，fork @angular/cli修复此问题
             skipRemoveDecorators: true
         })
     ]
