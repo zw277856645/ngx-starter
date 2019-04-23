@@ -10,10 +10,6 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const helpers = require('./helpers');
 const commonConfig = require('./webpack.common.js');
 
-// for dynamic module
-// 禁止ngtools删除元数据。官方没有提供配置，采用hack处理
-require('./hack-remove-decorators').hack();
-
 module.exports = webpackMerge(commonConfig, {
 
     entry: {
