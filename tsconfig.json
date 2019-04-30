@@ -7,18 +7,14 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "lib": [
-      "es2015",
+      "es6",
       "dom"
     ],
     "noImplicitAny": true,
     "suppressImplicitAnyIndexErrors": true,
     "typeRoots": [
-      "../node_modules/@types/"
+      "node_modules/@types"
     ]
   },
-  "compileOnSave": true,
-  "exclude": [
-    "node_modules/*",
-    "dist"
-  ]
+  "compileOnSave": true
 }

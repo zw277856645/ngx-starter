@@ -1,59 +1,69 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import {
-    HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpParams, HttpRequest, HttpResponse
+    HttpErrorResponse, HttpHandler, HttpInterceptor, HttpParams, HttpRequest, HttpResponse
 } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/map';
 import { ApiResponse, ApiResponseStatus } from '../model/api-response';
-import { isArray, isNullOrUndefined, isString } from 'util';
 import { ServerConfigsService } from '../service/server-configs.service';
 import { NavigationStart, Router } from '@angular/router';
 import { clone, isEmptyArray, isRealObject } from '../util/util';
+import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+import { isArray, isNullOrUndefined, isString } from 'cmjs-lib';
 
 @Injectable()
 export class MyHttpInterceptor implements HttpInterceptor {
 
-    constructor(private serverConfigsService: ServerConfigsService,
-                private router: Router) {
+    private serverConfigsService: ServerConfigsService;
+
+    constructor(private router: Router,
+                private injector: Injector) {
     }
 
-    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        return this.getUrl(req.url).switchMap(finalUrl => {
-            const dupReq = req.clone({
-                url: finalUrl,
-                params: this.trimParams(req.params),
-                body: this.trimBody(req.body),
-                withCredentials: true
-            });
+    intercept(req: HttpRequest<any>, next: HttpHandler) {
+        if (!this.serverConfigsService) {
+            this.serverConfigsService = this.injector.get(ServerConfigsService);
 
-            return next.handle(dupReq)
-                       // 切换导航时取消所有之前未完成的请求
-                       .takeUntil(this.router.events.filter(e => e instanceof NavigationStart))
-                       .map(event => {
-                           if (event instanceof HttpResponse) {
-                               return event.clone({ body: this.handlerResponse(event.body) });
-                           }
+            return next.handle(req);
+        } else {
+            return this.getUrl(req.url).pipe(
+                switchMap(finalUrl => {
+                    const dupReq = req.clone({
+                        url: finalUrl,
+                        params: this.trimParams(req.params),
+                        body: this.trimBody(req.body),
+                        withCredentials: true
+                    });
 
-                           return event;
-                       })
-                       .catch(event => {
-                           if (event instanceof HttpErrorResponse) {
-                               return Observable.throw(new HttpResponse({
-                                   body: this.handlerError(event)
-                               }));
-                           }
-                       });
-        });
+                    return next.handle(dupReq).pipe(
+                        // 切换导航时取消所有之前未完成的请求
+                        takeUntil(this.router.events.pipe(filter(e => e instanceof NavigationStart))),
+                        map(event => {
+                            if (event instanceof HttpResponse) {
+                                return event.clone({ body: MyHttpInterceptor.handlerResponse(event.body) });
+                            }
+
+                            return event;
+                        }),
+                        catchError(event => {
+                            if (event instanceof HttpErrorResponse) {
+                                return throwError(new HttpResponse({
+                                    body: MyHttpInterceptor.handlerError(event)
+                                }));
+                            }
+                        })
+                    );
+                })
+            );
+        }
     }
 
     private getUrl(url: string) {
-        return this.serverConfigsService.getServerUrl().map(serverUrl => {
-            return /^https?:\/\//i.test(url) ? url : serverUrl + url;
-        });
+        return this.serverConfigsService.getServerUrl().pipe(
+            map(serverUrl => /^https?:\/\//i.test(url) ? url : serverUrl + url)
+        );
     }
 
-    private handlerResponse(body: any) {
+    private static handlerResponse(body: any) {
         let ret = new ApiResponse();
         if (isRealObject(body)) {
             if (MyHttpInterceptor.isApiResponseStatus(body.status)) {
@@ -76,7 +86,7 @@ export class MyHttpInterceptor implements HttpInterceptor {
         }
     }
 
-    private handlerError(error: HttpErrorResponse) {
+    private static handlerError(error: HttpErrorResponse) {
         let ret;
         if (error.error && MyHttpInterceptor.isApiResponseStatus(error.error.status)) {
             ret = error.error;
@@ -164,8 +174,8 @@ export class MyHttpInterceptor implements HttpInterceptor {
     private static isApiResponseStatus(status: any) {
         if (isString(status)) {
             return [
-                ApiResponseStatus[ ApiResponseStatus.SUCCESS ],
-                ApiResponseStatus[ ApiResponseStatus.ERROR ]
+                ApiResponseStatus.SUCCESS,
+                ApiResponseStatus.ERROR
             ].indexOf(status.toUpperCase()) >= 0;
         }
 

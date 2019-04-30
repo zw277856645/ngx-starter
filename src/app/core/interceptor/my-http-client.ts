@@ -1,8 +1,9 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import { HttpObserve } from '@angular/common/http/src/client';
 import { ApiResponse } from '../model/api-response';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 export type ResponseType = 'json' | 'arraybuffer' | 'text' | 'blob';
 
@@ -56,12 +57,14 @@ export class MyHttpClient {
             catchError: true
         }, options);
 
-        return req.catch(err => {
-            let errBody = err.body as ApiResponse;
-            let data = ('errorData' in ops) ? ops.errorData : errBody;
+        return req.pipe(
+            catchError(err => {
+                let errBody = err.body as ApiResponse;
+                let data = ('errorData' in ops) ? ops.errorData : errBody;
 
-            return ops.catchError ? Observable.of(data) : Observable.throw(data);
-        });
+                return ops.catchError ? of(data) : throwError(data);
+            })
+        );
     }
 
 }

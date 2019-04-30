@@ -1,3 +1,6 @@
+# angular脚手架
+for angular >= 6
+
 # 需要修改配置的地方如下：
 
 package.json
@@ -7,25 +10,57 @@ package.json
 - author（可选）
 
 
-config/webpack.dev.js
-- devServer.host（可选）
-- devServer.port（可选）
+config/webpack.common.js
+- plugins CopyWebpackPlugin favicon
 
 
-config/webpack.prod.aot.js
-- plugins baseHref（可选，生产环境通常有项目前缀）
+config/webpack.prod.js
 - plugins CopyWebpackPlugin（可选，设置生产环境的app.config）
 
 
 src/index.html
 - title
+- base href（可选）
+- link favicon
 
 
 src/favicon
 
 
-# 不使用AOT编译或没有动态模块
-src/app/core/core.module.ts
-config/webpack.prod.aot.js
-- for dynamic module
+# 动态模块示例
+```javascript
+@NgModule({
+    imports: [
+        SharedModule
+    ],
+    declarations: [
+        DynamicComponent,
+        XxxComponent,
+        XxxDirective,
+        XxxPipe
+    ]
+})
+export class DynamicModule {
 
+    static forRoot(): ModuleWithProviders {
+        return {
+            ngModule: HostReuseModule,
+            providers: [
+                {
+                    provide: ANALYZE_FOR_ENTRY_COMPONENTS,
+                    useValue: [
+                        HostReuseComponent,
+                        XxxComponent
+                    ],
+                    multi: true,
+                }
+            ]
+        };
+    }
+}
+```
+
+# 在需要使用动态模块的模块(核心/特性)导入
+```javascript
+DynamicModule.forRoot()
+```

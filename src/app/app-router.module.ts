@@ -4,15 +4,15 @@ import { NgModule } from '@angular/core';
 const routes: Routes = [
     //{
     //    path: '',
-    //    loadChildren: () => require('es6-promise-loader!./home/home.module')('HomeModule')
+    //    loadChildren: './home/home.module#HomeModule'
     //},
     //{
     //    path: 'example',
-    //    loadChildren: () => require('es6-promise-loader!./example/example.module')('ExampleModule')
+    //    loadChildren: './example/example.module#ExampleModule'
     //},
     //{
     //    path: '**',
-    //    loadChildren: () => require('es6-promise-loader!./not-found/not-found.module')('NotFoundModule')
+    //    loadChildren: './not-found/not-found.module#NotFoundModule'
     //}
 ];
 

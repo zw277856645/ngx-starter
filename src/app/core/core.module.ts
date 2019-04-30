@@ -1,20 +1,18 @@
-import { COMPILER_OPTIONS, CompilerFactory, NgModule } from '@angular/core';
+import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { MyHttpInterceptor } from './interceptor/my-http.interceptor';
-import { HttpModule } from '@angular/http';
 import { ServerConfigsService } from './service/server-configs.service';
 import { MyHttpClient, myHttpClientCreator } from './interceptor/my-http-client';
 import { SharedCoreModule } from '../shared/shared-core.module';
-import { JitCompilerFactory } from '@angular/platform-browser-dynamic';
-import { RuntimeCompiler } from './service/compiler.service';
+import { NgxWebstorageModule } from 'ngx-webstorage';
 
 @NgModule({
     imports: [
         CommonModule,
-        HttpModule,
         HttpClientModule,
-        SharedCoreModule
+        SharedCoreModule,
+        NgxWebstorageModule.forRoot()
     ],
     declarations: [],
     exports: [
@@ -32,26 +30,14 @@ import { RuntimeCompiler } from './service/compiler.service';
             provide: MyHttpClient,
             useFactory: myHttpClientCreator,
             deps: [ HttpClient ]
-        },
-
-        // for dynamic module
-        // AOT会剔除编译模块，此处手动创建一个
-        {
-            provide: COMPILER_OPTIONS,
-            useValue: {},
-            multi: true
-        },
-        {
-            provide: CompilerFactory,
-            useClass: JitCompilerFactory,
-            deps: [ COMPILER_OPTIONS ]
-        },
-        {
-            provide: RuntimeCompiler,
-            useFactory: (compilerFactory: CompilerFactory) => compilerFactory.createCompiler(),
-            deps: [ CompilerFactory ]
         }
     ]
 })
 export class CoreModule {
+
+    constructor(@Optional() @SkipSelf() parentModule: CoreModule) {
+        if (parentModule) {
+            throw new Error('CoreModule只能在根模块(如AppModule)中引用一次');
+        }
+    }
 }

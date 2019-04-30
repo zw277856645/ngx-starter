@@ -213,6 +213,15 @@
       "check-preblock"
     ],
     "## TSLint 040": "使用 === 和 !== 替代 == 和 !=",
-    "triple-equals": true
+    "triple-equals": true,
+    "__ 2": "****************************************************************************",
+    "## Rxjs 001": "合并 import",
+    "rxjs-collapse-imports": true,
+    "## Rxjs 002": "强制使用 pipe 方式",
+    "rxjs-pipeable-operators-only": true,
+    "## Rxjs 003": "禁止静态方式调用 Observable",
+    "rxjs-no-static-observable-methods": true,
+    "## Rxjs 004": "该变 rxjs5 导入方式为 rxjs6",
+    "rxjs-proper-imports": true
   }
 }

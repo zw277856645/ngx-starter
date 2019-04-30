@@ -1,4 +1,4 @@
-import { isNullOrUndefined } from 'util';
+import { isNullOrUndefined } from 'cmjs-lib';
 
 export function clone<T>(obj: T): T {
     if (!obj) {
