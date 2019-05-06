@@ -13,6 +13,7 @@ import { isArray, isNullOrUndefined, isString } from 'cmjs-lib';
 @Injectable()
 export class MyHttpInterceptor implements HttpInterceptor {
 
+    private readonly DELETE_PROPS_PREFIX = '_';
     private serverConfigsService: ServerConfigsService;
 
     constructor(private router: Router,
@@ -132,7 +133,7 @@ export class MyHttpInterceptor implements HttpInterceptor {
 
     private trimBody(body: any) {
         if (isRealObject(body) && !(body instanceof FormData)) {
-            let delBody = MyHttpInterceptor.delDashesProps(body);
+            let delBody = this.delDashesProps(body);
 
             let bd = {};
             for (let k in delBody) {
@@ -184,12 +185,12 @@ export class MyHttpInterceptor implements HttpInterceptor {
         return false;
     }
 
-    private static delDashesProps(obj: any): any {
+    private delDashesProps(obj: any): any {
         if (isArray(obj)) {
             let copy = [];
 
             for (let i = 0, len = obj.length; i < len; i++) {
-                copy[ i ] = MyHttpInterceptor.delDashesProps(obj[ i ]);
+                copy[ i ] = this.delDashesProps(obj[ i ]);
             }
 
             return copy;
@@ -198,8 +199,8 @@ export class MyHttpInterceptor implements HttpInterceptor {
 
             for (let k in obj) {
                 if (obj.hasOwnProperty(k)) {
-                    if (!k.startsWith('_')) {
-                        copy[ k ] = MyHttpInterceptor.delDashesProps(obj[ k ]);
+                    if (!k.startsWith(this.DELETE_PROPS_PREFIX)) {
+                        copy[ k ] = this.delDashesProps(obj[ k ]);
                     }
                 }
             }
