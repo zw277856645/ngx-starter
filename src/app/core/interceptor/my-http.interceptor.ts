@@ -132,10 +132,12 @@ export class MyHttpInterceptor implements HttpInterceptor {
 
     private trimBody(body: any) {
         if (isRealObject(body) && !(body instanceof FormData)) {
+            let delBody = MyHttpInterceptor.delDashesProps(body);
+
             let bd = {};
-            for (let k in body) {
-                if (body.hasOwnProperty(k)) {
-                    let v = this.trimString(body[ k ]);
+            for (let k in delBody) {
+                if (delBody.hasOwnProperty(k)) {
+                    let v = this.trimString(delBody[ k ]);
                     if (!isNullOrUndefined(v)) {
                         bd[ k ] = v;
                     }
@@ -180,6 +182,32 @@ export class MyHttpInterceptor implements HttpInterceptor {
         }
 
         return false;
+    }
+
+    private static delDashesProps(obj: any): any {
+        if (isArray(obj)) {
+            let copy = [];
+
+            for (let i = 0, len = obj.length; i < len; i++) {
+                copy[ i ] = MyHttpInterceptor.delDashesProps(obj[ i ]);
+            }
+
+            return copy;
+        } else if (isRealObject(obj)) {
+            let copy = {};
+
+            for (let k in obj) {
+                if (obj.hasOwnProperty(k)) {
+                    if (!k.startsWith('_')) {
+                        copy[ k ] = MyHttpInterceptor.delDashesProps(obj[ k ]);
+                    }
+                }
+            }
+
+            return copy;
+        }
+
+        return obj;
     }
 
 }
