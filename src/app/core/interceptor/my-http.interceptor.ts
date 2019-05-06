@@ -5,7 +5,7 @@ import {
 import { ApiResponse, ApiResponseStatus } from '../model/api-response';
 import { ServerConfigsService } from '../service/server-configs.service';
 import { NavigationStart, Router } from '@angular/router';
-import { clone, isEmptyArray, isRealObject } from '../util/util';
+import { isEmptyArray, isRealObject } from '../util/util';
 import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { isArray, isNullOrUndefined, isString } from 'cmjs-lib';
@@ -152,26 +152,28 @@ export class MyHttpInterceptor implements HttpInterceptor {
     }
 
     private trimString(params: any) {
-        let pm = clone(params);
+        if (isString(params)) {
+            return params.trim();
+        } else if (isRealObject(params)) {
+            let copy = {};
 
-        if (isString(pm)) {
-            return pm.trim();
-        } else if (isRealObject(pm)) {
-            for (let k in (pm as any)) {
-                if (pm.hasOwnProperty(k)) {
-                    pm[ k ] = this.trimString(pm[ k ]);
-                    if (isNullOrUndefined(pm[ k ])) {
-                        delete pm[ k ];
+            for (let k in (params as any)) {
+                if (params.hasOwnProperty(k)) {
+                    params[ k ] = this.trimString(params[ k ]);
+                    if (!isNullOrUndefined(params[ k ])) {
+                        copy[ k ] = params[ k ];
                     }
                 }
             }
-        } else if (isArray(pm)) {
-            for (let i = 0, len = pm.length; i < len; i++) {
-                pm[ i ] = this.trimString(pm[ i ]);
+
+            return copy;
+        } else if (isArray(params)) {
+            for (let i = 0, len = params.length; i < len; i++) {
+                params[ i ] = this.trimString(params[ i ]);
             }
         }
 
-        return pm;
+        return params;
     }
 
     private static isApiResponseStatus(status: any) {
