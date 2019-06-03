@@ -6,4 +6,4 @@ if (process.env.PRODUCTION) {
     enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule);
+platformBrowserDynamic().bootstrapModule(AppModule, { preserveWhitespaces: false });
