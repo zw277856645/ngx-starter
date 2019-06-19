@@ -1,6 +1,6 @@
 export enum ApiResponseStatus {
 
-    SUCCESS, ERROR
+    SUCCESS = 'SUCCESS', ERROR = 'ERROR'
 }
 
 export class ApiResponse {

@@ -8,7 +8,6 @@ import { NavigationStart, Router } from '@angular/router';
 import { isEmptyArray, isRealObject } from '../util/util';
 import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
 import { throwError } from 'rxjs';
-import { isArray, isNullOrUndefined, isString } from 'cmjs-lib';
 
 @Injectable()
 export class MyHttpInterceptor implements HttpInterceptor {
@@ -77,7 +76,7 @@ export class MyHttpInterceptor implements HttpInterceptor {
             }
 
             return ret;
-        } else if (isArray(body) || isNullOrUndefined(body)) {
+        } else if (Array.isArray(body) || body === null || body === undefined) {
             ret.status = ApiResponseStatus.SUCCESS;
             ret.data = body;
 
@@ -98,7 +97,7 @@ export class MyHttpInterceptor implements HttpInterceptor {
             ret.status = ApiResponseStatus.ERROR;
             ret.message = error.error.error;
             ret.detail = error.error.message;
-        } else if (isString(error.error)) {
+        } else if (typeof error.error === 'string') {
             ret = new ApiResponse();
             ret.status = ApiResponseStatus.ERROR;
             ret.message = error.error;
@@ -120,7 +119,7 @@ export class MyHttpInterceptor implements HttpInterceptor {
             let pm = {};
             params.keys().forEach(k => {
                 let v = this.trimString(params.getAll(k));
-                if (!(isEmptyArray(v) || (v.length === 1 && isNullOrUndefined(v[ 0 ])))) {
+                if (!(isEmptyArray(v) || (v.length === 1 && (v[ 0 ] === null || v[ 0 ] === undefined)))) {
                     pm[ k ] = v;
                 }
             });
@@ -139,7 +138,7 @@ export class MyHttpInterceptor implements HttpInterceptor {
             for (let k in delBody) {
                 if (delBody.hasOwnProperty(k)) {
                     let v = this.trimString(delBody[ k ]);
-                    if (!isNullOrUndefined(v)) {
+                    if (!(v === null || v === undefined)) {
                         bd[ k ] = v;
                     }
                 }
@@ -152,7 +151,7 @@ export class MyHttpInterceptor implements HttpInterceptor {
     }
 
     private trimString(params: any) {
-        if (isString(params)) {
+        if (typeof params === 'string') {
             return params.trim();
         } else if (isRealObject(params)) {
             let copy = {};
@@ -160,14 +159,14 @@ export class MyHttpInterceptor implements HttpInterceptor {
             for (let k in (params as any)) {
                 if (params.hasOwnProperty(k)) {
                     params[ k ] = this.trimString(params[ k ]);
-                    if (!isNullOrUndefined(params[ k ])) {
+                    if (!(params[ k ] === null || params[ k ] === undefined)) {
                         copy[ k ] = params[ k ];
                     }
                 }
             }
 
             return copy;
-        } else if (isArray(params)) {
+        } else if (Array.isArray(params)) {
             for (let i = 0, len = params.length; i < len; i++) {
                 params[ i ] = this.trimString(params[ i ]);
             }
@@ -177,18 +176,18 @@ export class MyHttpInterceptor implements HttpInterceptor {
     }
 
     private static isApiResponseStatus(status: any) {
-        if (isString(status)) {
+        if (typeof status === 'string') {
             return [
                 ApiResponseStatus.SUCCESS,
                 ApiResponseStatus.ERROR
-            ].indexOf(status.toUpperCase()) >= 0;
+            ].indexOf(status.toUpperCase() as ApiResponseStatus) >= 0;
         }
 
         return false;
     }
 
     private delDashesProps(obj: any): any {
-        if (isArray(obj)) {
+        if (Array.isArray(obj)) {
             let copy = [];
 
             for (let i = 0, len = obj.length; i < len; i++) {

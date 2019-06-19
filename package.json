@@ -31,7 +31,7 @@
     "@types/jquery": "2.0.43",
     "@types/semantic-ui": "2.2.0",
     "core-js": "2.5.7",
-    "cmjs-lib": "0.2.7",
+    "cmjs-lib": "0.2.10",
     "jquery": "3.2.1",
     "json-loader": "0.5.4",
     "moment": "2.18.1",

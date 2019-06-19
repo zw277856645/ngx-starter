@@ -1,5 +1,3 @@
-import { isNullOrUndefined } from 'cmjs-lib';
-
 export function clone<T>(obj: T): T {
     if (!obj) {
         return obj;
@@ -37,16 +35,4 @@ export function isEmptyObject(obj: any) {
     }
 
     return true;
-}
-
-export function uniqueArray(arr: any[]) {
-    let result = [], hash = {};
-    for (let i = 0, elem; !isNullOrUndefined(elem = arr[ i ]); i++) {
-        if (!hash[ elem ]) {
-            result.push(elem);
-            hash[ elem ] = true;
-        }
-    }
-
-    return result;
 }
