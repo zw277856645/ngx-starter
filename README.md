@@ -6,6 +6,7 @@ for angular >= 6
 package.json
 - name
 - description
+- repository
 - keywords（可选）
 - author（可选）
 
