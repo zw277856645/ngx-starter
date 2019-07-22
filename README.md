@@ -35,23 +35,25 @@ src/favicon
         SharedModule
     ],
     declarations: [
-        DynamicComponent,
         XxxComponent,
         XxxDirective,
         XxxPipe
+        ...
     ]
 })
 export class DynamicModule {
 
     static forRoot(): ModuleWithProviders {
         return {
-            ngModule: HostReuseModule,
+            ngModule: DynamicModule,
             providers: [
                 {
                     provide: ANALYZE_FOR_ENTRY_COMPONENTS,
                     useValue: [
-                        HostReuseComponent,
-                        XxxComponent
+                        XxxComponent,
+                        XxxDirective,
+                        XxxPipe
+                        ...
                     ],
                     multi: true,
                 }
