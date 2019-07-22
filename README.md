@@ -1,5 +1,5 @@
 # angular脚手架
-for angular >= 6
+for angular >= 8
 
 # 需要修改配置的地方如下：
 

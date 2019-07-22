@@ -4,15 +4,15 @@ import { NgModule } from '@angular/core';
 const routes: Routes = [
     //{
     //    path: '',
-    //    loadChildren: './home/home.module#HomeModule'
+    //    loadChildren: import('./home/home.module').then(m => m.HomeModule)
     //},
     //{
     //    path: 'example',
-    //    loadChildren: './example/example.module#ExampleModule'
+    //    loadChildren: import('./example/example.module').then(m => m.ExampleModule)
     //},
     //{
     //    path: '**',
-    //    loadChildren: './not-found/not-found.module#NotFoundModule'
+    //    loadChildren: import('./not-found/not-found.module').then(m => m.NotFoundModule)
     //}
 ];
 

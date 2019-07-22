@@ -18,22 +18,11 @@ module.exports = webpackMerge(commonConfig, {
 
     module: {
         rules: [
-            // 减小bundle文件大小
-            {
-                test: /\.js$/,
-                loader: '@angular-devkit/build-optimizer/webpack-loader',
-                options: { sourceMap: true }
-            },
             {
                 test: /\.js$/,
                 exclude: /(ngfactory|ngstyle).js$/,
                 enforce: 'pre',
                 loader: 'source-map-loader'
-            },
-            {
-                test: /\.js$/,
-                exclude: [ /node_modules\/(?!(dom7|swiper)\/).*/ ],
-                loader: 'babel-loader'
             }
         ]
     },

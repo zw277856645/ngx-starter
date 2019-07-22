@@ -5,14 +5,12 @@ import { MyHttpInterceptor } from './interceptor/my-http.interceptor';
 import { ServerConfigsService } from './service/server-configs.service';
 import { MyHttpClient, myHttpClientCreator } from './interceptor/my-http-client';
 import { SharedCoreModule } from '../shared/shared-core.module';
-import { NgxWebstorageModule } from 'ngx-webstorage';
 
 @NgModule({
     imports: [
         CommonModule,
         HttpClientModule,
-        SharedCoreModule,
-        NgxWebstorageModule.forRoot()
+        SharedCoreModule
     ],
     declarations: [],
     exports: [

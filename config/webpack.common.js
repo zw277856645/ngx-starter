@@ -102,8 +102,7 @@ module.exports = {
 
     plugins: [
         new IndexHtmlWebpackPlugin({
-            input: './src/index.html',
-            output: 'index.html',
+            input: 'index.html',
             entrypoints: [
                 'polyfills',
                 'vendor',

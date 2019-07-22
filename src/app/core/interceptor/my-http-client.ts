@@ -1,18 +1,18 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpObserve } from '@angular/common/http/src/client';
 import { ApiResponse } from '../model/api-response';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 export type ResponseType = 'json' | 'arraybuffer' | 'text' | 'blob';
+export type ObserveType = 'body' | 'events' | 'response';
 
 export interface RequestOptions {
     body?: any;
     headers?: HttpHeaders | {
         [ header: string ]: string | string[];
     };
-    observe?: HttpObserve;
+    observe?: ObserveType;
     params?: HttpParams | {
         [ param: string ]: any | any[];
     };
