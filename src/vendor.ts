@@ -22,4 +22,4 @@ import 'cmjs-lib';
 // asset script
 
 // asset style
-import './asset/style/base.less';
+import './assets/style/base.less';
