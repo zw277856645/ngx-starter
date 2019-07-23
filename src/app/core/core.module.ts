@@ -4,17 +4,11 @@ import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common
 import { MyHttpInterceptor } from './interceptor/my-http.interceptor';
 import { ServerConfigsService } from './service/server-configs.service';
 import { MyHttpClient, myHttpClientCreator } from './interceptor/my-http-client';
-import { SharedCoreModule } from '../shared/shared-core.module';
 
 @NgModule({
     imports: [
         CommonModule,
-        HttpClientModule,
-        SharedCoreModule
-    ],
-    declarations: [],
-    exports: [
-        SharedCoreModule
+        HttpClientModule
     ],
     providers: [
         ServerConfigsService,
