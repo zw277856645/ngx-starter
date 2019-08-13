@@ -30,7 +30,7 @@
     "@angular/upgrade": "8.1.2",
     "@types/jquery": "2.0.43",
     "core-js": "2.5.7",
-    "cmjs-lib": "0.2.10",
+    "cmjs-lib": "*",
     "jquery": "3.2.1",
     "moment": "2.18.1",
     "rxjs": "6.5.1",
