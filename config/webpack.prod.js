@@ -2,9 +2,9 @@ const webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { AngularCompilerPlugin } = require('@ngtools/webpack');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const { CleanCssWebpackPlugin } = require('@angular-devkit/build-angular/src/angular-cli-files/plugins/cleancss-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 const commonConfig = require('./webpack.common.js');
 
@@ -28,6 +28,12 @@ module.exports = webpackMerge(commonConfig, {
                 exclude: /(ngfactory|ngstyle).js$/,
                 enforce: 'pre',
                 loader: 'source-map-loader'
+            },
+            {
+                test: /\.js$/,
+                exclude: [ /node_modules\/(?!(dom7|swiper)\/).*/ ],
+                loader: 'babel-loader',
+                options: { presets: [ '@babel/env' ] }
             }
         ]
     },
@@ -36,24 +42,26 @@ module.exports = webpackMerge(commonConfig, {
         noEmitOnErrors: true,
         minimizer: [
             new webpack.HashedModuleIdsPlugin(),
-            new UglifyJSPlugin({
+            new TerserPlugin({
                 sourceMap: true,
                 cache: true,
                 parallel: true,
-                uglifyOptions: {
+                terserOptions: {
                     output: {
                         comments: false
                     },
                     compress: {
                         pure_getters: true,
                         passes: 3,
-                        inline: 3
+                        inline: 3,
+                        // fix bug - ngDevMode is not defined
+                        global_defs: require('@angular/compiler-cli').GLOBAL_DEFS_FOR_TERSER
                     }
                 }
             }),
             new CleanCssWebpackPlugin({
                 sourceMap: true,
-                test: (file) => /\.(?:css)$/.test(file),
+                test: (file) => /\.(?:css)$/.test(file)
             })
         ]
     },
