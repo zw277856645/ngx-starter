@@ -16,7 +16,13 @@
     "type": "git",
     "url": "https://gitlab.com/zw277856645/ngx-starter"
   },
-  "keywords": [],
+  "keywords": [
+    "脚手架",
+    "starter",
+    "seed",
+    "angular",
+    "webpack"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {
