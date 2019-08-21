@@ -20,6 +20,11 @@ module.exports = webpackMerge(commonConfig, {
         rules: [
             {
                 test: /\.js$/,
+                loader: '@angular-devkit/build-optimizer/webpack-loader',
+                options: { sourceMap: true }
+            },
+            {
+                test: /\.js$/,
                 exclude: /(ngfactory|ngstyle).js$/,
                 enforce: 'pre',
                 loader: 'source-map-loader'
