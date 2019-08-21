@@ -3,7 +3,7 @@ for angular >= 8
 
 # 需要修改配置的地方如下：
 
-package.json
+#### package.json
 - name
 - description
 - repository
@@ -11,21 +11,21 @@ package.json
 - author（可选）
 
 
-config/webpack.common.js
+#### config/webpack.common.js
 - plugins CopyWebpackPlugin favicon
 
 
-config/webpack.prod.js
+#### config/webpack.prod.js
 - plugins CopyWebpackPlugin（可选，设置生产环境的app.config）
 
 
-src/index.html
+#### src/index.html
 - title
 - base href（可选）
 - link favicon
 
 
-src/favicon
+#### src/favicon
 
 
 # 动态模块示例
