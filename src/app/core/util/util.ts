@@ -36,3 +36,7 @@ export function isEmptyObject(obj: any) {
 
     return true;
 }
+
+export function isNullOrUndefined(value: any) {
+    return value === null || value === undefined;
+}
