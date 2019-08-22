@@ -35,7 +35,7 @@
     "@angular/router": "8.1.2",
     "@angular/upgrade": "8.1.2",
     "@types/jquery": "2.0.43",
-    "cmjs-lib": "0.4.0",
+    "cmjs-lib": "0.4.4",
     "core-js": "2.5.7",
     "jquery": "3.2.1",
     "moment": "2.18.1",
