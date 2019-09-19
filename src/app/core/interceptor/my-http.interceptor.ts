@@ -1,9 +1,9 @@
-import { Injectable, Injector } from '@angular/core';
+import { Injectable } from '@angular/core';
 import {
     HttpErrorResponse, HttpHandler, HttpInterceptor, HttpParams, HttpRequest, HttpResponse
 } from '@angular/common/http';
 import { ApiResponse, ApiResponseStatus } from '../model/api-response';
-import { ServerConfigsService } from '../service/server-configs.service';
+import { ServerConfigsService } from './server-configs.service';
 import { NavigationStart, Router } from '@angular/router';
 import { isEmptyArray, isRealObject } from '../util/util';
 import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
@@ -13,16 +13,13 @@ import { throwError } from 'rxjs';
 export class MyHttpInterceptor implements HttpInterceptor {
 
     private readonly DELETE_PROPS_PREFIX = '_';
-    private serverConfigsService: ServerConfigsService;
 
     constructor(private router: Router,
-                private injector: Injector) {
+                private serverConfigsService: ServerConfigsService) {
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler) {
-        if (!this.serverConfigsService) {
-            this.serverConfigsService = this.injector.get(ServerConfigsService);
-
+        if ([ ServerConfigsService.APP_CONFIG_URL ].indexOf(req.url) >= 0) {
             return next.handle(req);
         } else {
             return this.getUrl(req.url).pipe(

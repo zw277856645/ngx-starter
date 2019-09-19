@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack-dev-server --config config/webpack.dev.js --progress --open --profile --watch",
     "prod": "webpack --config config/webpack.prod.js --progress",
-    "prod:start": "npm run prod && http-server ./dist -o",
+    "prod:start": "npm run prod && cp app.config.json ./dist && http-server ./dist -o",
     "clean": "rimraf dist",
     "lint": "tslint -c tslint.json -p src/tsconfig.app.json",
     "test": "karma start",
