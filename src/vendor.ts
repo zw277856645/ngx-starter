@@ -15,7 +15,6 @@ import 'jquery';
 
 // third party script
 import 'moment';
-import 'cmjs-lib';
 
 // third party style
 
