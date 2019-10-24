@@ -84,20 +84,29 @@ export class MyHttpInterceptor implements HttpInterceptor {
     }
 
     private static handlerError(error: HttpErrorResponse) {
-        let ret;
-        if (error.error && MyHttpInterceptor.isApiResponseStatus(error.error.status)) {
-            ret = error.error;
-            ret.status = ApiResponseStatus.ERROR;
-            ret.detail = ret.data;
-        } else if (error.error && error.error.error) {
-            ret = new ApiResponse();
-            ret.status = ApiResponseStatus.ERROR;
-            ret.message = error.error.error;
-            ret.detail = error.error.message;
-        } else if (typeof error.error === 'string') {
-            ret = new ApiResponse();
-            ret.status = ApiResponseStatus.ERROR;
-            ret.message = error.error;
+        let ret: ApiResponse;
+
+        if (error.error) {
+            if (typeof error.error === 'object') {
+                if (MyHttpInterceptor.isApiResponseStatus(error.error.status)) {
+                    ret = error.error;
+                    ret.status = ApiResponseStatus.ERROR;
+                    ret.detail = ret.data;
+                } else if (error.error.error) {
+                    ret = new ApiResponse();
+                    ret.status = ApiResponseStatus.ERROR;
+                    ret.message = error.error.error;
+                    ret.detail = error.error.message;
+                } else {
+                    ret = new ApiResponse();
+                    ret.status = ApiResponseStatus.ERROR;
+                    ret.message = error.error.toString();
+                }
+            } else {
+                ret = new ApiResponse();
+                ret.status = ApiResponseStatus.ERROR;
+                ret.message = error.error;
+            }
         } else if (error.status === 0 && error.statusText === 'Unknown Error') {
             ret = new ApiResponse();
             ret.status = ApiResponseStatus.ERROR;
@@ -107,6 +116,8 @@ export class MyHttpInterceptor implements HttpInterceptor {
             ret.status = ApiResponseStatus.ERROR;
             ret.message = error.message;
         }
+
+        ret.statusCode = String(error.status);
 
         return ret;
     }

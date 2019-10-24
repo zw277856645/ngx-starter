@@ -13,4 +13,6 @@ export class ApiResponse {
 
     detail?: string;
 
+    statusCode?: string;
+
 }
