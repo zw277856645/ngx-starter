@@ -4,9 +4,9 @@ import {
 } from '@angular/common/http';
 import { ApiResponse, ApiResponseStatus } from '../model/api-response';
 import { ServerConfigsService } from './server-configs.service';
-import { NavigationEnd, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { isEmptyArray, isRealObject } from '../util/util';
-import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 
 @Injectable()
@@ -32,8 +32,6 @@ export class MyHttpInterceptor implements HttpInterceptor {
                     });
 
                     return next.handle(dupReq).pipe(
-                        // 切换导航时取消所有之前未完成的请求
-                        takeUntil(this.router.events.pipe(filter(e => e instanceof NavigationEnd))),
                         map(event => {
                             if (event instanceof HttpResponse) {
                                 return event.clone({ body: MyHttpInterceptor.handlerResponse(event.body) });
