@@ -45,15 +45,6 @@ module.exports = {
                 test: /\.html$/,
                 loader: 'html-loader'
             },
-            // 资源转换成base64，超出limit交给file-loader处理
-            {
-                test: /\.(png|svg|jpe?g|gif|woff|woff2|eot|ttf|ico)$/,
-                loader: 'url-loader',
-                options: {
-                    name: 'asset/[name].[hash].[ext]',
-                    limit: 8192
-                }
-            },
             // app内css/less
             {
                 test: /\.(css|less)$/,
@@ -75,6 +66,15 @@ module.exports = {
                     'postcss-loader',
                     'less-loader'
                 ]
+            },
+            // 资源转换成base64，超出limit交给file-loader处理
+            {
+                test: /\.(png|svg|jpe?g|gif|woff|woff2|eot|ttf|ico)$/,
+                loader: 'url-loader',
+                options: {
+                    name: 'asset/[name].[hash].[ext]',
+                    limit: 8192
+                }
             },
             // 隐藏webpack抛出的deprecation警告
             {
