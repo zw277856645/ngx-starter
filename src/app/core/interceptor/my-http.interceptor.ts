@@ -4,7 +4,6 @@ import {
 } from '@angular/common/http';
 import { ApiResponse, ApiResponseStatus } from '../model/api-response';
 import { ServerConfigsService } from './server-configs.service';
-import { Router } from '@angular/router';
 import { isEmptyArray, isRealObject } from '../util/util';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { throwError } from 'rxjs';
@@ -14,8 +13,7 @@ export class MyHttpInterceptor implements HttpInterceptor {
 
     private readonly DELETE_PROPS_PREFIX = '_';
 
-    constructor(private router: Router,
-                private serverConfigsService: ServerConfigsService) {
+    constructor(private serverConfigsService: ServerConfigsService) {
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler) {
